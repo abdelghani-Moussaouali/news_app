@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_ui_setup/Services/news_services.dart';
-import 'package:news_app_ui_setup/models/article_model.dart';
 import 'package:news_app_ui_setup/widgets/Category_list_View.dart';
-import 'package:news_app_ui_setup/widgets/NewsListView.dart';
+import 'package:news_app_ui_setup/widgets/NewsListViewBuilder.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,51 +20,10 @@ class HomePage extends StatelessWidget {
               SliverToBoxAdapter(
                 child: CategoryListView(),
               ),
-              NewsListViewBuilder(),
+              NewsListViewBuilder(title: 'general',),
             ],
           ),
         ));
   }
 }
 
-class NewsListViewBuilder extends StatefulWidget {
-  const NewsListViewBuilder({
-    super.key,
-  });
-
-  @override
-  State<NewsListViewBuilder> createState() => _NewsListViewBuilderState();
-}
-
-class _NewsListViewBuilderState extends State<NewsListViewBuilder> {
-  bool isLoading = true;
-  List<ArticleModel> articles = [];
-  @override
-  void initState() {
-    super.initState();
-
-    get();
-  }
-
-  Future<void> get() async {
-    articles = await NewsServices().getGeneralNews();
-    isLoading = false;
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return isLoading
-        ? const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 400,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          )
-        : NewsListView(
-            articles: articles,
-          );
-  }
-}
